@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debouncing</title>
+</head>
+<body>
+    <!-- 
+// Debouncing is a technique used in JavaScript to limit the rate at which 
+// a function is executed. This is particularly useful when you have a function 
+// that gets called frequently due to events like scrolling, resizing, or typing.
+//  Without debouncing, such functions might execute so often that they can cause performance issues or unnecessary computations. -->
+
+<input type="text" id="textInput" placeholder="Type something...">
+
+
+<script>
+    /// without debouncing
+    // function handleInput(e) {
+    //     console.log(e.target.value);
+    // }
+    // const inputElement1 = document.getElementById('textInput');
+    // inputElement1.addEventListener('input',handleInput);
+
+
+   /// with debouncing
+    function debounce(callback,delay) {
+        let tiemOutID;
+
+        return function() {
+            const context = this;
+            const args = arguments;
+
+            clearTimeout(tiemOutID);
+
+            tiemOutID = setTimeout(() => callback.apply(context,args),delay);
+        }
+    }
+    function handleInput(e) {
+        console.log(e.target.value);
+    }
+    const inputElement = document.getElementById('textInput');
+
+    const callingDebounce = debounce(handleInput,500);
+
+    inputElement.addEventListener('input',callingDebounce);
+</script>
+
+ 
+</body>
+</html>
