@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Throttling</title>
+  </head>
+
+  <body>
+    <!-- Throttling is another technique used in JavaScript to control the rate at which a function can be executed. It ensures that the function is not executed more than once within a specified time interval, regardless of how many times it is invoked -->
+    <input type="text" id="textInput" placeholder="Type something..." />
+
+    <script>
+      // const inputElement = document.getElementById('textInput');
+      // function handleInput(e) {
+      //     console.log(e.target.value);
+      // }
+      // inputElement.addEventListener('input',handleInput);
+
+      // with throttling
+      function throttle(callback, delay) {
+        let isWaiting = false;
+        let lastValue = null;
+        let lastContext = null;
+
+        return function (...args) {
+          if (isWaiting) {
+            lastValue = args;
+            lastContext = this;
+            return;
+          }
+          callback.apply(this, args);
+          isWaiting = true;
+          setTimeout(() => {
+            isWaiting = false;
+            if (lastValue !== null) {
+              callback.apply(lastContext, lastValue);
+              lastValue = null;
+              lastContext = null;
+            }
+          }, delay);
+        };
+      }
+      function handleInput(e) {
+        console.log(e.target.value);
+      }
+      const inputElement = document.getElementById("textInput");
+      const throttledHandleInput = throttle(handleInput, 2000);
+      inputElement.addEventListener("input", throttledHandleInput);
+    </script>
+  </body>
+</html>
